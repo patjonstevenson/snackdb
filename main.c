@@ -3,9 +3,9 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "input_buffer.h"
-#include "statement.h"
-#include "metacommand.h"
+#include "repl/input_buffer.h"
+#include "repl/statement.h"
+#include "repl/metacommand.h"
 
 
 int main(int argc, char* argv[]) {
