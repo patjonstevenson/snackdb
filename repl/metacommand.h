@@ -1,3 +1,6 @@
+#ifndef METACOMMAND_H
+#define METACOMMAND_H
+
 #include "input_buffer.h"
 
 
@@ -8,4 +11,4 @@ typedef enum {
 
 MetaCommandResult do_meta_command(InputBuffer* input_buffer);
 
-
+#endif
