@@ -3,6 +3,7 @@
 
 #include "input_buffer.h"
 #include "../store/row.h"
+#include "../store/table.h"
 
 #include <stdint.h>
 
@@ -27,6 +28,12 @@ typedef enum {
     PREPARE_SYNTAX_ERROR
 } PrepareResult;
 
+typedef enum {
+    EXECUTE_SUCCESS,
+    EXECUTE_TABLE_FULL,
+    EXECUTE_FAILURE_UNKNOWN
+} ExecuteResult;
+
 /*
  * Function Declarations
  */
@@ -34,6 +41,10 @@ typedef enum {
 PrepareResult prepare_statement(InputBuffer* input_buffer, 
                                 Statement* statement);
 
-void execute_statement(Statement* statement);
+ExecuteResult execute_insert(Statement* statement, Table* table);
+
+ExecuteResult execute_select(Statement* statement, Table* table);
+
+ExecuteResult execute_statement(Statement* statement, Table* table);
 
 #endif

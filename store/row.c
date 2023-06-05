@@ -12,6 +12,9 @@ const uint32_t ROW_SIZE = ID_SIZE + USERNAME_SIZE + EMAIL_SIZE;
 
 
 
+/* 
+ * Converts row to compact representation
+ */
 void serialize_row(Row* source, void* destination) {
     memcpy(destination + ID_OFFSET,
            &(source->id),
@@ -26,6 +29,9 @@ void serialize_row(Row* source, void* destination) {
            EMAIL_SIZE);
 }
 
+/*
+ * Converts row from compact representation to struct
+ */
 void deserialize_row(void* source, Row* destination) {
     memcpy(&(destination->id),
            source + ID_OFFSET,
