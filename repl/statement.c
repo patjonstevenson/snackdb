@@ -32,6 +32,9 @@ PrepareResult prepare_statement(InputBuffer* input_buffer,
 
 ExecuteResult execute_insert(Statement* statement, Table* table) {
     if (table->num_rows >= TABLE_MAX_ROWS) {
+        printf("Num rows currently: %d\n", table->num_rows);
+        printf("Address of num rows: %p\n", &table->num_rows);
+        printf("Max rows: %d\n", TABLE_MAX_ROWS);
         return EXECUTE_TABLE_FULL;
     }
 

@@ -25,3 +25,9 @@ main: input_buffer metacommand statement row table main.c
 	gcc input_buffer.o metacommand.o statement.o row.o table.o main.o -o snackdb
 	rm *.o
 
+debug: input_buffer metacommand statement row table main.c
+	gcc -c main.c
+	gcc input_buffer.o metacommand.o statement.o row.o table.o main.o -g -o snackdb
+	rm *.o
+
+

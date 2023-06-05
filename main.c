@@ -53,5 +53,6 @@ int main(int argc, char* argv[]) {
         }
 
     }
+    free_table(table);
     return 0;
 }

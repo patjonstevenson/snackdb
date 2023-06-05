@@ -34,6 +34,20 @@ void serialize_row(Row* source, void* destination) {
  * Converts row from compact representation to struct
  */
 void deserialize_row(void* source, Row* destination) {
+
+    memcpy(source + ID_OFFSET,
+           &(destination->id),
+           ID_SIZE);
+
+    memcpy(source + USERNAME_OFFSET,
+           &(destination->username),
+           USERNAME_SIZE);
+
+    memcpy(source + EMAIL_OFFSET,
+           &(destination->email),
+           EMAIL_SIZE);
+
+    /* OLD
     memcpy(&(destination->id),
            source + ID_OFFSET,
            ID_SIZE);
@@ -45,9 +59,10 @@ void deserialize_row(void* source, Row* destination) {
     memcpy(&(destination->email),
            source + EMAIL_OFFSET,
            EMAIL_SIZE);
+    */
 }
 
 void print_row(Row* row) {
-    printf("%d %s %s", row->id, row->username, row->email);
+    printf("%d %s %s\n", row->id, row->username, row->email);
 }
 
