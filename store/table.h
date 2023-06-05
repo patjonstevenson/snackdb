@@ -22,6 +22,10 @@ typedef struct {
     void* pages[TABLE_MAX_PAGES]; // Array of pointers to pages
 } Table;
 
+Table* new_table();
+
+void free_table(Table* table);
+
 // Function to determine where to read/write in memory for a particular row
 void* row_slot(Table* table, uint32_t row_num);
 
