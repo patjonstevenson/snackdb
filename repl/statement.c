@@ -1,4 +1,6 @@
 #include "statement.h"
+#include "../store/row.h"
+
 #include <string.h>
 #include <stdio.h>
 

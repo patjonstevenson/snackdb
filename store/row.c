@@ -1,6 +1,7 @@
 #include "row.h"
 
 #include <string.h>
+#include <stdio.h>
 
 const uint32_t ID_SIZE = size_of_attribute(Row, id);
 const uint32_t USERNAME_SIZE = size_of_attribute(Row, username);
@@ -44,5 +45,9 @@ void deserialize_row(void* source, Row* destination) {
     memcpy(&(destination->email),
            source + EMAIL_OFFSET,
            EMAIL_SIZE);
+}
+
+void print_row(Row* row) {
+    printf("%d %s %s", row->id, row->username, row->email);
 }
 
