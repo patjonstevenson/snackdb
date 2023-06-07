@@ -45,6 +45,7 @@ void* row_slot(Table* table, uint32_t row_num) {
     // Find row within memory
     uint32_t byte_offset = row_offset * ROW_SIZE;
     
+    // TODO: This is showing the same memory address every time.
     printf("Row slot: %p\n", page + byte_offset);
     return page + byte_offset;
 }
