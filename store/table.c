@@ -1,11 +1,11 @@
 #include "table.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 
 Table* new_table() {
-    //Table tbl;
-    Table* table = malloc(sizeof(Table));//&tbl;
+    Table* table = malloc(sizeof(Table));
 
     table->num_rows = 0;
 
@@ -44,6 +44,8 @@ void* row_slot(Table* table, uint32_t row_num) {
 
     // Find row within memory
     uint32_t byte_offset = row_offset * ROW_SIZE;
-
+    
+    printf("Row slot: %p\n", page + byte_offset);
     return page + byte_offset;
 }
+
