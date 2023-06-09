@@ -48,6 +48,6 @@ void deserialize_row(void* source, Row* destination) {
 }
 
 void print_row(Row* row) {
-    printf("%d %s %s\n", row->id, row->username, row->email);
+    printf("(%d, %s, %s)\n", row->id, row->username, row->email);
 }
 
