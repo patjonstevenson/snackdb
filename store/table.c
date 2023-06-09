@@ -5,7 +5,7 @@
 
 
 Table* new_table() {
-    Table* table = malloc(sizeof(Table));
+    Table* table = (Table*)malloc(sizeof(Table));
 
     table->num_rows = 0;
 
