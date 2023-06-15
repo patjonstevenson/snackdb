@@ -1,0 +1,3 @@
+Current Issues
+--------------
+- After inserting multiple rows and running select, I see the last inserted row repeated. Something is being overridden somewhere in the insert, or the selct is messed up.
