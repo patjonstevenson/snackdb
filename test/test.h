@@ -27,12 +27,12 @@ int run_tests(int num_tests, ...) {
 
     va_start(tests, num_tests);
 
-    bool remaining_tests = true;
+    int num_tests_remaining = num_tests;
 
     int successes = 0;
 
     int num_failed_tests = 0;
-    while (remaining_tests) {
+    while (num_tests_remaining > 0) {
         Test test = va_arg(tests, Test);
         TestResult result = (*test)();
         //int does_test_pass = 0;
@@ -50,14 +50,11 @@ int run_tests(int num_tests, ...) {
             }
         }
         free(result.assertions);
-        //successes += does_test_pass ? 0 : 1;
-
-        //successes += num_failed_tests != 0 ? 0 : 1;
+        num_tests_remaining--;
     }
     successes = num_tests - num_failed_tests;
-    printf("have successes\n");
 
-    printf("%d/%d tests passed", successes, num_tests);
+    printf("%d/%d tests passed\n", successes, num_tests);
 
     return successes;
 }
