@@ -73,4 +73,42 @@ TestResult test_one() {
     return result;
 }
 
+#define TEST(NAME) \
+    TestResult #NAME() { \
+        TestResult RESULT_OF_TEST_M; \
+        RESULT_OF_TEST_M.num_assertions = 0;\
+        RESULT_OF_TEST_M.assertions = (*Assertion)malloc(0);
+
+
+#define END_TEST \
+    return RESULT_OF_TEST_M;\
+    }
+
+// Need to copy existing assertions into a temporary array\
+    // based on the existing num_assertions\
+    // or could just copy the address\
+    // Then increment num_assertions by 1, create the assertion,\
+    // malloc new one with new\
+    // num_assertions, loop over temp assertion array, adding\
+    // them to the new assertion array\
+    // then free the old pointer\
+    // then add the new assertion to the last position in the assertion array\
+
+// TODO: Need to come up with a way to create a unique assertion name. Maybe scope this in a function within the macro. Can I use # to declare a name?
+#define ASSERT_EQ(EXPR1, EXPR2) \
+    do { \
+    \
+    Assertion* TEMP_ASSERTIONS = &RESULT_OF_TEST_M.assertions;\
+    RESULT_OF_TEST_M.assertions = (Assertion*)malloc(sizeof(Assertion) * ++RESULT_OF_TEST_M.num_assertions);\
+    for (int ASSERTION_INDEX_M = 0; ASSERTION_INDEX_M < RESULT_OF_TEST_M - 1; ASSERTION_INDEX_M++) {\
+        RESULT_OF_TEST_M.assertions[i] = TEMP_ASSERTIONS[i];\
+    }\
+    Assertion ASSERTION_M; \
+    ASSERTION_M.pass_or_fail = (int)(EXPR1 == EXPR2);\
+    ASSERTION_M.expected = #EXPR1;\
+    ASSERTION_M.actual = #EXPR2;\
+    RESULT_OF_TEST_M.assertions[RESULT_OF_TEST_M.num_assertions - 1] = ASSERTION_M;\
+    free(TEMP_ASSERTIONS);\
+    } while(0);
+
 #endif
