@@ -29,18 +29,28 @@ table: $(store)/table.c $(store)/table.h
 main: input_buffer metacommand statement row table $(SRC_DIR)/main.c
 	$(CC) -c $(SRC_DIR)/main.c
 	$(CC) input_buffer.o metacommand.o statement.o row.o table.o main.o -o snackdb
-	rm *.o
+	#rm *.o
 
 debug: input_buffer metacommand statement row table $(SRC_DIR)/main.c
 	$(CC) -c $(SRC_DIR)/main.c
 	$(CC) input_buffer.o metacommand.o statement.o row.o table.o main.o -g -o snackdb
+	#rm *.o
+
+clean:
 	rm *.o
 
 # TEST
-TESTS=$(TEST_DIR)/*.c
-test: $(TESTS)
-	$(CC) -c $(TESTS)
-	$(CC) *.o -g -o run_test
+TESTS=$(TEST_DIR)/*/*.c
+
+#test: $(TESTS) main
+test: $(TESTS) input_buffer metacommand statement row table $(TEST_DIR)/test.c
+	#rm main.o
+	#$(CC) -c $(TESTS)
+	$(CC) -c $(TEST_DIR)/test.c
+	#$(CC) *.o -g -o run_test
+	$(CC) input_buffer.o metacommand.o statement.o row.o table.o test.o -g -o run_test
+
 	rm *.o
 	./run_test
+	#rm ./run_test
 
