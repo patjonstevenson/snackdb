@@ -89,13 +89,13 @@ TestResult test_one() {
 // Declares array of name TEST_<file_path> and test count TEST_COUNT_<file_path> to be imported by test main for use in run_tests
 #define TEST_FILE_START \
     Test* TEST_ARRAY_NAME(); \
-    int TEST_COUNT_NAME() = 0;
+    int TEST_COUNT_NAME() = 0; \
+    char* MOST_RECENT_TEST_NAME = "";
 
 #define VSTR(EXPR) #EXPR
 
 #define STR(EXPR) VSTR(EXPR)
 
-#define MOST_RECENT_TEST_NAME ""
 
 // Begin test function.
 #define TEST(TEST_NAME) \
@@ -105,7 +105,7 @@ TestResult test_one() {
     /* Need to undef and redef most recent test name so we can add it to test array in END_TEST */\
     /*#undef MOST_RECENT_TEST_NAME */ \
     /*#define most_recent_test_name str(name)*/ \
-    most_recent_test_name = str(name) \
+    MOST_RECENT_TEST_NAME = str(name) \
     \
     /* Now we can create our new test */ \
     TestResult TEST_NAME() { \
