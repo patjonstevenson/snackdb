@@ -103,11 +103,12 @@ TestResult test_one() {
     RESIZE_ARRAY(TEST_ARRAY_NAME(), &TEST_COUNT_NAME(), Test); \
     \
     /* Need to undef and redef most recent test name so we can add it to test array in END_TEST */\
-    #undef MOST_RECENT_TEST_NAME \
-    #define MOST_RECENT_TEST_NAME STR(NAME) \
+    /*#undef MOST_RECENT_TEST_NAME */ \
+    /*#define most_recent_test_name str(name)*/ \
+    most_recent_test_name = str(name) \
     \
     /* Now we can create our new test */ \
-    TestResult #TEST_NAME() { \
+    TestResult TEST_NAME() { \
     TestResult RESULT_OF_TEST_M; \
     RESULT_OF_TEST_M.num_assertions = 0;\
     RESULT_OF_TEST_M.assertions = (*Assertion)malloc(0);\
