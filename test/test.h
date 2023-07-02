@@ -22,6 +22,7 @@ typedef struct {
 
 typedef TestResult(*Test)();
 
+// TODO: Instead of va_list, just pass an array of function pointers.
 int run_tests(int num_tests, ...) {
     va_list tests;
 
@@ -35,12 +36,9 @@ int run_tests(int num_tests, ...) {
     while (num_tests_remaining > 0) {
         Test test = va_arg(tests, Test);
         TestResult result = (*test)();
-        //int does_test_pass = 0;
+
         for (int i = 0; i < result.num_assertions; i++) {
             Assertion assertion = result.assertions[i];
-            //if (assertion.pass_or_fail) {
-            //    does_test_pass += 0;
-            //}
         
             if (1 != assertion.pass_or_fail) {
                 num_failed_tests += 1;
@@ -74,47 +72,50 @@ TestResult test_one() {
 }
 
 
-#define CONCAT(EXPR1, EXPR2) EXPR1 ## EXPR2
+#define CONCAT(EXPR1, EXPR2) EXPR1##EXPR2
 
 #define RESIZE_ARRAY(ARRAY_ADDRESS, CURRENT_ARRAY_LENGTH_ADDRESS, ARRAY_ELEMENT_TYPE) \
-    Assertion* TEMP_ASSERTIONS = ARRAY_ADDRESS; /*&RESULT_OF_TEST_M.assertions;*/ \
+    Assertion* TEMP_ASSERTIONS = ARRAY_ADDRESS; \
     ARRAY_ADDRESS = (ARRAY_ELEMENT_TYPE*)malloc(sizeof(ARRAY_ELEMENT_TYPE) * ++(*CURRENT_ARRAY_LENGTH_ADDRESS)); \
     \
     for (int ASSERTION_INDEX_M = 0; ASSERTION_INDEX_M < RESULT_OF_TEST_M - 1; ASSERTION_INDEX_M++) { \
         ARRAY_ADDRESS[i] = TEMP_ASSERTIONS[i]; \
     } \
 
-#define TEST_FILE_NAME() CONCAT("TEST_", __FILE__)
+#define TEST_ARRAY_NAME() CONCAT("TEST_", __FILE__)
 
-#define TEST_FILE \
-    Test* TEST_FILE_NAME()
+#define TEST_COUNT_NAME() CONCAT("TEST_COUNT_", __FILE__)
+
+// Declares array of name TEST_<file_path> and test count TEST_COUNT_<file_path> to be imported by test main for use in run_tests
+#define TEST_FILE_START \
+    Test* TEST_ARRAY_NAME(); \
+    int TEST_COUNT_NAME() = 0;
+
+#define VSTR(EXPR) #EXPR
+
+#define STR(EXPR) VSTR(EXPR)
+
+#define MOST_RECENT_TEST_NAME ""
 
 // Begin test function.
-#define TEST(NAME) \
-    /* Need to add the new test to tests array. */ \
-    TEST_FILE_NAME() \
+#define TEST(TEST_NAME) \
+    /* Need to make space for the new test in tests array and increment the test count. */ \
+    RESIZE_ARRAY(TEST_ARRAY_NAME(), &TEST_COUNT_NAME(), Test); \
+    \
+    /* Need to undef and redef most recent test name so we can add it to test array in END_TEST */\
+    #undef MOST_RECENT_TEST_NAME \
+    #define MOST_RECENT_TEST_NAME STR(NAME) \
     \
     /* Now we can create our new test */ \
-    TestResult #NAME() { \
-        TestResult RESULT_OF_TEST_M; \
-        RESULT_OF_TEST_M.num_assertions = 0;\
-        RESULT_OF_TEST_M.assertions = (*Assertion)malloc(0);
+    TestResult #TEST_NAME() { \
+    TestResult RESULT_OF_TEST_M; \
+    RESULT_OF_TEST_M.num_assertions = 0;\
+    RESULT_OF_TEST_M.assertions = (*Assertion)malloc(0);\
 
 // Close out test function
 #define END_TEST \
     return RESULT_OF_TEST_M;\
     }
-
-/*
-  Need to resize our assertions array  \
-        Assertion* TEMP_ASSERTIONS = &RESULT_OF_TEST_M.assertions; \
-        RESULT_OF_TEST_M.assertions = (Assertion*)malloc(sizeof(Assertion) * ++RESULT_OF_TEST_M.num_assertions); \
-        \
-        for (int ASSERTION_INDEX_M = 0; ASSERTION_INDEX_M < RESULT_OF_TEST_M - 1; ASSERTION_INDEX_M++) { \
-            RESULT_OF_TEST_M.assertions[i] = TEMP_ASSERTIONS[i]; \
-        } \
-        \
- */
 
 #define ASSERT_EQ(EXPR1, EXPR2) \
     do { \
